@@ -5,6 +5,8 @@ import Layout from "./Pages/Layout"
 import HomePage from "./Pages/HomePage"
 import LoginPage from "./Pages/LoginPage"
 import ErrorPage from "./Pages/ErrorPage"
+import SignupPage from "./Pages/SignupPage"
+import ForgottenPasswordpage from "./Pages/ForgottenPasswordPage"
 
 const App = () => {
   return (
@@ -20,6 +22,11 @@ const App = () => {
             }
           />
           <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/signup" element={<SignupPage />} />
+          <Route
+            path="/auth/forgotten-password"
+            element={<ForgottenPasswordpage />}
+          />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>

@@ -6,7 +6,138 @@
   box-sizing: border-box;
 }
 
+img,
+svg {
+  width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.login-section {
+  gap: 2rem;
+  margin: auto;
+  height: 100vh;
+  display: grid;
+  padding: 1.5rem;
+  max-width: 850px;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: auto 1fr;
+}
+
+.login-section .container {
+  gap: 1rem;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  max-width: 350px;
+  text-align: center;
+  flex-direction: column;
+}
+
+.login-content > img {
+  width: 13rem;
+  margin: 0.75rem auto 1.5rem;
+}
+
+.login-content form {
+  gap: 0.5rem;
+  display: grid;
+}
+
+.login-content form input {
+  outline: none;
+  font-size: 0.75rem;
+  border-radius: 0.2rem;
+  padding: 0.65rem 0.5rem;
+  background-color: var(--grey);
+  border: 1px solid var(--border);
+}
+
+.login-content form button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: var(--white);
+  border-radius: 0.5rem;
+  margin: 0.5rem 0 1.35rem 0;
+  background-color: var(--blue);
+}
+
+.login-content form ~ a {
+  font-size: 0.85rem;
+  color: var(--dark-blue);
+}
+
+.login-content,
+.signup-content {
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--border);
+}
+
+.signup-content {
+  padding: 1.35rem;
+  font-size: 0.85rem;
+}
+
+.signup-content a {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--blue);
+}
+
+.install-content {
+  gap: 1rem;
+  display: grid;
+  font-size: 0.85rem;
+}
+
+.install-content .img-flex {
+  gap: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.install-content .img-flex a {
+  width: 7.5rem;
+}
+
+.install-content .img-flex a img {
+  height: 100%;
+}
+
+@media screen and (max-width: 760px) {
+  .login-section {
+    grid-template-columns: 1fr;
+  }
+
+  .login-section > img {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .install-content .img-flex {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+:root {
+  --white: hsl(0, 0%, 100%);
+  --grey: hsl(0, 0%, 98.04%);
+  --black: hsl(0, 0%, 14.9%);
+  --border: hsl(0, 0%, 85.88%);
+  --blue: hsl(203.58, 93.51%, 63.73%);
+  --dark-blue: hsl(203.48, 100%, 36.08%);
 }
