@@ -21,8 +21,10 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-.login-section {
-  gap: 2rem;
+.login-section,
+.signup-section,
+.complete-signup-section,
+.forgotten-password-section {
   margin: auto;
   height: 100vh;
   display: grid;
@@ -30,30 +32,70 @@ body {
   max-width: 850px;
   align-items: center;
   justify-content: center;
+}
+
+.login-section {
+  gap: 2rem;
   grid-template-columns: auto 1fr;
 }
 
-.login-section .container {
+.forgotten-password-section .back-to-login {
+  padding: 0.5rem;
+  font-weight: 600;
+  color: var(--grey);
+  border-radius: 0.2rem;
+  background-color: var(--border);
+}
+
+.forgotten-password-section .info {
+  gap: 0.5rem;
+  display: grid;
+  color: var(--black);
+}
+
+.forgotten-password-section .info h3 {
+  font-size: 1rem;
+}
+
+.forgotten-password-section .info p {
+  font-size: 0.85rem;
+}
+
+.auth-container {
   gap: 1rem;
   width: 100%;
   margin: auto;
-  display: flex;
+  display: grid;
   max-width: 350px;
   text-align: center;
-  flex-direction: column;
+  grid-template-rows: 1fr auto auto;
 }
 
-.login-content > img {
-  width: 13rem;
-  margin: 0.75rem auto 1.5rem;
+.auth-box {
+  gap: 1rem;
+  display: grid;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--border);
+  grid-template-rows: auto 1fr auto auto;
 }
 
-.login-content form {
+.auth-box .heading {
+  display: grid;
+  overflow: hidden;
+}
+
+.auth-box .heading img {
+  margin: auto;
+  width: 10rem;
+}
+
+.auth-box form {
   gap: 0.5rem;
   display: grid;
 }
 
-.login-content form input {
+.auth-box form input,
+.auth-box form select {
   outline: none;
   font-size: 0.75rem;
   border-radius: 0.2rem;
@@ -62,62 +104,70 @@ body {
   border: 1px solid var(--border);
 }
 
-.login-content form button {
+.auth-box form button {
   border: none;
   outline: none;
   cursor: pointer;
   padding: 0.5rem;
+  margin-top: 1rem;
   font-weight: bold;
   color: var(--white);
   border-radius: 0.5rem;
-  margin: 0.5rem 0 1.35rem 0;
+  background-color: var(--dark-blue);
+}
+
+.auth-box form button[disabled] {
   background-color: var(--blue);
 }
 
-.login-content form ~ a {
+.auth-box .err {
+  color: var(--red);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-box .fp {
   font-size: 0.85rem;
   color: var(--dark-blue);
 }
 
-.login-content,
-.signup-content {
-  padding: 1rem 2.5rem;
+.auth-referral {
+  padding: 1.35rem;
+  font-size: 0.85rem;
   border: 1px solid var(--border);
 }
 
-.signup-content {
-  padding: 1.35rem;
-  font-size: 0.85rem;
-}
-
-.signup-content a {
+.auth-referral a {
   cursor: pointer;
   font-weight: bold;
   color: var(--blue);
 }
 
-.install-content {
+.install-app {
   gap: 1rem;
   display: grid;
   font-size: 0.85rem;
 }
 
-.install-content .img-flex {
+.install-app .img-flex {
   gap: 1rem;
   display: flex;
   justify-content: center;
 }
 
-.install-content .img-flex a {
+.install-app .img-flex a {
   width: 7.5rem;
 }
 
-.install-content .img-flex a img {
+.install-app .img-flex a img {
   height: 100%;
 }
 
 @media screen and (max-width: 760px) {
-  .login-section {
+  .login-section,
+  .signup-section,
+  .complete-signup-section,
+  .forgotten-password-section {
     grid-template-columns: 1fr;
   }
 
@@ -127,7 +177,7 @@ body {
 }
 
 @media screen and (max-width: 300px) {
-  .install-content .img-flex {
+  .install-app .img-flex {
     align-items: center;
     flex-direction: column;
   }
@@ -138,6 +188,7 @@ body {
   --grey: hsl(0, 0%, 98.04%);
   --black: hsl(0, 0%, 14.9%);
   --border: hsl(0, 0%, 85.88%);
+  --red: hsl(354.88, 83.23%, 69.61%);
   --blue: hsl(203.58, 93.51%, 63.73%);
-  --dark-blue: hsl(203.48, 100%, 36.08%);
+  --dark-blue: hsl(203.66, 100%, 48.24%);
 }

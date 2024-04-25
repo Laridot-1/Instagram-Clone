@@ -6,6 +6,8 @@ import HomePage from "./Pages/HomePage"
 import LoginPage from "./Pages/LoginPage"
 import ErrorPage from "./Pages/ErrorPage"
 import SignupPage from "./Pages/SignupPage"
+import AuthLayout from "./Pages/AuthLayout"
+import CompleteSignupPage from "./Pages/CompleteSignupPage"
 import ForgottenPasswordpage from "./Pages/ForgottenPasswordPage"
 
 const App = () => {
@@ -21,13 +23,24 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/auth/signup" element={<SignupPage />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Route>
+
+        <Route path="accounts" element={<AuthLayout />}>
+          <Route index element={<LoginPage />} />
+          <Route path="signup" element={<SignupPage />} />
           <Route
-            path="/auth/forgotten-password"
+            path="complete-signup"
+            element={
+              <ProtectedRoute>
+                <CompleteSignupPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="forgotten-password"
             element={<ForgottenPasswordpage />}
           />
-          <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
