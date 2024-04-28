@@ -16,7 +16,7 @@ const LoginPage = () => {
   }
 
   return (
-    <section className="login-section">
+    <section className="login-section auth-section">
       <img src="/auth.png" alt="Auth image" />
 
       <div className="auth-container">

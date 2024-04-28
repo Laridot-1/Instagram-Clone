@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 import ProtectedRoute from "./Pages/ProtectedRoute"
-import Layout from "./Pages/Layout"
+import Layout from "./Layout/Layout"
 import HomePage from "./Pages/HomePage"
 import LoginPage from "./Pages/LoginPage"
 import ErrorPage from "./Pages/ErrorPage"
 import SignupPage from "./Pages/SignupPage"
-import AuthLayout from "./Pages/AuthLayout"
+import AuthLayout from "./Layout/AuthLayout"
 import CompleteSignupPage from "./Pages/CompleteSignupPage"
 import ForgottenPasswordpage from "./Pages/ForgottenPasswordPage"
 

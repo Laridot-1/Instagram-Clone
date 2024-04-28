@@ -12,7 +12,7 @@ const ForgottenPasswordPage = () => {
   }
 
   return (
-    <section className="forgotten-password-section">
+    <section className="forgotten-password-section auth-section">
       <div className="auth-container">
         <div className="auth-box">
           <div className="heading">

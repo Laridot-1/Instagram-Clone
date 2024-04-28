@@ -12,7 +12,7 @@ const SignupPage = () => {
   }
 
   return (
-    <section className="signup-section">
+    <section className="signup-section auth-section">
       <div className="auth-container">
         <div className="auth-box">
           <div className="heading">

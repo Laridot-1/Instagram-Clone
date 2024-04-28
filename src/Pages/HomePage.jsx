@@ -1,7 +1,11 @@
-import React from "react"
+import FeedPosts from "../Components/FeedPosts"
 
 const HomePage = () => {
-  return <div>HomePage</div>
+  return (
+    <section className="page homepage">
+      <FeedPosts />
+    </section>
+  )
 }
 
 export default HomePage

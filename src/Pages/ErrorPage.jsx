@@ -1,7 +1,7 @@
 import React from "react"
 
 const ErrorPage = () => {
-  return <div>ErrorPage</div>
+  return <section className="page">ErrorPage</section>
 }
 
 export default ErrorPage
