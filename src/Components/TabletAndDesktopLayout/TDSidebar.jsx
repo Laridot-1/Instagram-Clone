@@ -1,17 +1,33 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
   CreatePostLogo,
   InstagramLogo,
   InstagramMobileLogo,
   NotificationsLogo,
   SearchLogo,
-} from "../assets/constants"
+} from "../../assets/constants"
 import { TiHomeOutline } from "react-icons/ti"
 import { FaHeart, FaHouse } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
+import { useGlobalContext } from "../../Context"
 
-const TDSidebar = () => {
+const TDSidebar = ({ user }) => {
   const { pathname } = useLocation()
+  const { Auth, setUser } = useGlobalContext()
+  const navigate = useNavigate()
+
+  let userProfile = `user/${user?.username}`
+
+  const handleLogout = async () => {
+    try {
+      await Auth.signout()
+      setUser(null)
+      localStorage.removeItem("user")
+      navigate("/accounts")
+    } catch (err) {
+      alert("An error occured")
+    }
+  }
 
   return (
     <aside className="td-sidebar">
@@ -45,18 +61,18 @@ const TDSidebar = () => {
             <span className="text">Create</span>
           </Link>
         </li>
-        <li className={pathname == "/profile" ? "profile active" : "profile"}>
-          <Link to={null} className="tooltip">
+        <li className={pathname == userProfile ? "profile active" : "profile"}>
+          <Link to={userProfile} className="tooltip">
             <img className="user" src="/anonymous.jpg" alt="user" />
             <span className="text">Profile</span>
           </Link>
         </li>
       </ul>
 
-      <Link to="accounts" className="logout tooltip">
+      <button className="logout tooltip" onClick={handleLogout}>
         <FaSignOutAlt />
         <span className="text">Log out</span>
-      </Link>
+      </button>
     </aside>
   )
 }

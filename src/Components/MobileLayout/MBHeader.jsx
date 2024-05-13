@@ -1,5 +1,4 @@
-import React from "react"
-import { InstagramLogo, NotificationsLogo } from "../assets/constants"
+import { InstagramLogo, NotificationsLogo } from "../../assets/constants"
 
 const MBHeader = () => {
   return (

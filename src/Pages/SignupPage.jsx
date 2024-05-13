@@ -1,15 +1,62 @@
-import React, { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useGlobalContext } from "../Context"
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { db } from "../firebase"
 
 const SignupPage = () => {
   const [email, setEmail] = useState("")
   const [err, setErr] = useState("")
+  const [isSent, setIsSent] = useState(false)
+  const [isSending, setIsSending] = useState(false)
 
-  const handleSignup = () => {}
+  const { Auth } = useGlobalContext()
+
+  const emailReg =
+    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+
+  const handleSignup = async () => {
+    if (emailReg.test(email)) {
+      setIsSending(true)
+      try {
+        let q = query(collection(db, "users"), where("email", "==", email))
+        let querysnapshots = await getDocs(q)
+        if (!querysnapshots.empty) {
+          setErr("Email already in use by another account.")
+          setIsSending(false)
+          return
+        }
+
+        await Auth.signup(email)
+        localStorage.setItem("emailForSignUp", email)
+        setIsSent(true)
+        setEmail("")
+        setIsSending(false)
+      } catch (err) {
+        setErr(err.code)
+      }
+    } else {
+      setErr("Enter a valid email address")
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
   }
+
+  useEffect(() => {
+    let id = setTimeout(() => {
+      setErr("")
+    }, 3000)
+    return () => id
+  }, [err])
+
+  useEffect(() => {
+    let id = setTimeout(() => {
+      setIsSent(false)
+    }, 3000)
+    return () => id
+  }, [isSent])
 
   return (
     <section className="signup-section auth-section">
@@ -17,6 +64,14 @@ const SignupPage = () => {
         <div className="auth-box">
           <div className="heading">
             <img src="/logo.png" alt="logo" />
+            {isSent ? (
+              <p>
+                Check your email for a link to complete your sign up. You might
+                want to check your spam messages.
+              </p>
+            ) : (
+              ""
+            )}
           </div>
           <form onSubmit={handleSubmit}>
             <input
@@ -27,7 +82,10 @@ const SignupPage = () => {
               placeholder="Email address"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button disabled={email ? false : true} onClick={handleSignup}>
+            <button
+              disabled={email && !isSending ? false : true}
+              onClick={handleSignup}
+            >
               Verify Email
             </button>
           </form>

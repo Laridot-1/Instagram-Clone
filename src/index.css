@@ -46,6 +46,10 @@ Auth Styling
   grid-template-columns: auto 1fr;
 }
 
+.signup-section .heading p {
+  font-size: 0.85rem;
+}
+
 .forgotten-password-section .back-to-login {
   padding: 0.5rem;
   font-weight: 600;
@@ -205,7 +209,19 @@ End of Auth Styling
 .page {
   overflow: auto;
   grid-row: 2 / 3;
+  padding: 2rem 1rem;
   grid-column: 2 / 3;
+}
+
+.error-page {
+  gap: 2rem;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+.error-page a {
+  color: var(--blue);
 }
 
 /*
@@ -275,9 +291,13 @@ Desktop and Tablet Sidebar Styling
 }
 
 .logout {
+  border: none;
+  outline: none;
+  cursor: pointer;
   padding: 0.85rem;
   position: relative;
   border-radius: 0.35rem;
+  background-color: transparent;
 }
 
 .logout:hover {
@@ -375,6 +395,7 @@ Mobile Header and navbar styling
 }
 
 .mb-header > :last-child svg {
+  flex-shrink: 0;
   cursor: pointer;
 }
 
@@ -409,6 +430,11 @@ Mobile Header and navbar styling
   width: 1.5rem;
 }
 
+.mb-logout {
+  cursor: pointer;
+  color: var(--dark-grey);
+}
+
 @media screen and (max-width: 650px) {
   .td-sidebar {
     display: none;
@@ -433,15 +459,176 @@ Homepage Styling
 */
 
 .homepage {
+  display: grid;
+  grid-template-columns: 1fr auto;
 }
 
 .feedposts {
   gap: 2rem;
   display: grid;
-  justify-content: center;
 }
 
 .feedpost {
+  gap: 0.5rem;
+  width: 100%;
+  display: flex;
+  max-width: 400px;
+  justify-self: center;
+  flex-direction: column;
+}
+
+.feedpost .post-heading {
+  gap: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.feedpost .post-heading .user {
+  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.feedpost .post-heading .user img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+}
+
+.feedpost .post-heading .user .u-info :first-child {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.feedpost .post-heading .user .u-info :last-child {
+  font-size: 0.85rem;
+}
+
+.feedpost .post-heading button {
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-blue);
+  background-color: transparent;
+}
+
+.feedpost .post-content {
+  display: grid;
+  overflow: hidden;
+  min-height: 500px;
+  align-items: center;
+  border-radius: 0.3rem;
+  border: 1.5px solid var(--border);
+}
+
+.feedpost .post-content img {
+  max-height: 570px;
+  object-fit: contain;
+}
+
+.feedpost .post-footer {
+  gap: 0.65rem;
+  display: grid;
+  font-size: 0.95rem;
+  color: var(--black);
+}
+
+.feedpost .post-footer .action-icons {
+  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.feedpost .post-footer .action-icons > * {
+  cursor: pointer;
+}
+
+.feedpost .post-footer .like-count,
+.feedpost .post-footer .ucap :first-child {
+  font-weight: 700;
+}
+
+.feedpost .post-footer .comments-count {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  justify-self: start;
+  background-color: transparent;
+}
+
+.feedpost .post-footer form {
+  display: flex;
+  padding-bottom: 1rem;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.feedpost .post-footer form input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.feedpost .post-footer form button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  background-color: transparent;
+}
+
+.suggested-users {
+  gap: 0.5rem;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.suggested-users > p {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.suggested-user {
+  gap: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.suggested-user > div {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.suggested-user > div img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+}
+
+.suggested-user button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--dark-blue);
+  background-color: transparent;
+}
+
+@media screen and (max-width: 1024px) {
+  .suggested-users {
+    display: none;
+  }
 }
 
 /*
@@ -450,11 +637,363 @@ End of Homepage Styling
 =======================
 */
 
+/*
+====================
+Profile Page styling
+====================
+*/
+
+.profile-page {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.td-profile-header {
+  gap: 4rem;
+  display: flex;
+  align-items: start;
+  padding-bottom: 1rem;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.td-skeleton {
+  display: flex;
+}
+
+.td-profile-header img {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+}
+
+.td-profile-header .user-info {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.td-profile-header .user-info > :first-child,
+.mb-profile-header > :first-child {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.td-profile-header .user-info > :first-child button,
+.mb-profile-header > :first-child > div button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--white);
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--dark-grey);
+}
+
+.td-profile-header .user-info > :nth-child(2) {
+  gap: 1rem;
+  display: flex;
+  text-align: center;
+}
+
+.td-profile-header .user-info > :last-child,
+.mb-profile-header > :nth-child(2) {
+  display: flex;
+  flex-direction: column;
+}
+
+.mb-profile-header {
+  gap: 1rem;
+  display: none;
+  flex-direction: column;
+}
+
+.mb-skeleton {
+  display: none;
+}
+
+.mb-profile-header > :first-child img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+
+.mb-profile-header > :first-child > div {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 300px) {
+  .mb-profile-header > :first-child > div {
+    flex-direction: column;
+  }
+}
+
+.mb-profile-header > :last-child {
+  gap: 1rem;
+  display: flex;
+  padding-block: 1rem;
+  justify-content: space-around;
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+}
+
+.mb-profile-header > :last-child p {
+  display: flex;
+  font-size: 0.85rem;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mb-profile-header > :last-child p :first-child {
+  font-weight: 600;
+}
+
+.profile-posts {
+  gap: 0.15rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.profile-post {
+  cursor: pointer;
+  min-width: 70px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-post > img {
+  max-height: 350px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.profile-post .overlay {
+  inset: 0;
+  opacity: 0;
+  z-index: 5;
+  gap: 0.5rem;
+  display: flex;
+  transition: 0.2s;
+  position: absolute;
+  visibility: hidden;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(0 0 0 / 0.5);
+}
+
+.profile-post .overlay.overlay-hide {
+  display: none;
+}
+
+.profile-post .overlay div {
+  gap: 0.5rem;
+  display: flex;
+  fill: var(--white);
+  color: var(--white);
+}
+
+.profile-post:hover .overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.profile-modal-overlay {
+  inset: 0;
+  display: none;
+  position: absolute;
+  background-color: hsl(0 0 0 / 0.5);
+}
+
+.profile-modal-overlay.modal-shown {
+  display: block;
+}
+
+.profile-modal-overlay > svg {
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 1.5rem;
+  position: absolute;
+  color: var(--white);
+}
+
+.profile-modal {
+  inset: 0;
+  gap: 1rem;
+  width: 90%;
+  z-index: 4;
+  height: 80%;
+  margin: auto;
+  display: flex;
+  padding: 1rem;
+  overflow: hidden;
+  max-width: 750px;
+  max-height: 500px;
+  position: absolute;
+  border-radius: 0.5rem;
+  background-color: var(--white);
+  box-shadow: 0 0 0.45rem -0.15rem var(--black);
+}
+
+.profile-modal > img {
+  width: 50%;
+  object-fit: contain;
+}
+
+.profile-modal .modal-comment {
+  flex: 1;
+  gap: 1rem;
+  display: grid;
+  overflow: hidden;
+  grid-template-rows: auto 1fr auto;
+}
+
+.profile-modal .modal-comment .modal-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.profile-modal .modal-comment .modal-header div {
+  gap: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+
+.profile-modal .modal-comment .modal-header img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.profile-modal .modal-comment .modal-header svg {
+  cursor: pointer;
+  font-size: 1.15rem;
+}
+
+.profile-comments {
+  gap: 0.85rem;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+.profile-comment {
+  gap: 0.85rem;
+  display: flex;
+  align-items: start;
+}
+
+.profile-comment img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+}
+
+.profile-comment div {
+  gap: 0.85rem;
+  display: flex;
+}
+
+.profile-comment div :first-child {
+  font-weight: 600;
+}
+
+.profile-modal .modal-comment .modal-footer {
+  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-modal .modal-comment .modal-footer > :first-child {
+  gap: 0.75rem;
+  display: flex;
+  cursor: pointer;
+}
+
+.profile-modal .modal-comment .modal-footer > :nth-child(2) {
+  gap: 0.25rem;
+  display: flex;
+  line-height: 0.5;
+  font-size: 0.9rem;
+}
+
+.profile-modal .modal-comment .modal-footer > :nth-child(3) {
+  line-height: 0.5;
+  font-size: 0.9rem;
+}
+
+.profile-modal .modal-comment .modal-footer form {
+  display: flex;
+  padding-bottom: 0.5rem;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.profile-modal .modal-comment .modal-footer form input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background-color: transparent;
+}
+
+.profile-modal .modal-comment .modal-footer form button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 650px) {
+  .td-profile-header,
+  .td-skeleton {
+    display: none;
+  }
+
+  .mb-profile-header {
+    display: flex;
+  }
+
+  .mb-skeleton {
+    display: block;
+  }
+
+  .profile-post .overlay {
+    flex-direction: column;
+  }
+
+  .profile-modal > img {
+    width: 100%;
+  }
+
+  .profile-modal .modal-comment {
+    display: none;
+  }
+}
+
+/*
+===========================
+End of Profile Page styling
+===========================
+*/
+
 :root {
   --white: hsl(0, 0%, 100%);
   --grey: hsl(0, 0%, 98.04%);
   --black: hsl(0, 0%, 14.9%);
   --border: hsl(0, 0%, 85.88%);
+  --dark-grey: hsl(0, 0%, 21.18%);
   --red: hsl(354.88, 83.23%, 69.61%);
   --blue: hsl(203.58, 93.51%, 63.73%);
   --dark-blue: hsl(203.66, 100%, 48.24%);

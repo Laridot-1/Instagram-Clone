@@ -1,4 +1,21 @@
-import React, { useRef, useState } from "react"
+import {
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  updatePassword,
+} from "firebase/auth"
+import { useEffect, useRef, useState } from "react"
+import { auth, db } from "../firebase"
+import { Navigate, useNavigate } from "react-router-dom"
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  serverTimestamp,
+  setDoc,
+  where,
+} from "firebase/firestore"
+import { useGlobalContext } from "../Context"
 
 const CompleteSignupPage = () => {
   const [err, setErr] = useState("")
@@ -6,22 +23,104 @@ const CompleteSignupPage = () => {
     fname: "",
     lname: "",
     uname: "",
-    age: "",
+    dob: "",
     pword: "",
   })
+  const [isCompletingSignup, setIsCompletingSignup] = useState(false)
   const genderRef = useRef(null)
+  const { setUser } = useGlobalContext()
+  const navigate = useNavigate()
 
   const handleInput = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value })
   }
 
-  const handleComplete = () => {
-    console.log({ ...userInfo, gender: genderRef.current.value })
+  const handleComplete = async () => {
+    if (
+      !userInfo.fname ||
+      !userInfo.lname ||
+      !userInfo.uname ||
+      !userInfo.dob ||
+      !userInfo.pword
+    ) {
+      setErr("Please fill all fields.")
+      return
+    }
+
+    try {
+      setIsCompletingSignup(true)
+
+      let email = localStorage.getItem("emailForSignUp")
+      if (!email) {
+        email = prompt("Please provide your email for confirmation")
+      }
+
+      const q = query(
+        collection(db, "users"),
+        where("username", "==", userInfo.uname)
+      )
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        setErr("Username already exist.")
+        setIsCompletingSignup(false)
+        return
+      }
+
+      await signInWithEmailLink(auth, email, location.href)
+
+      localStorage.removeItem("emailForSignUp")
+
+      await updatePassword(auth.currentUser, userInfo.pword)
+
+      const newUser = {
+        gender: genderRef.current.value,
+        uid: auth.currentUser.uid,
+        username: userInfo.uname,
+        email,
+        fullName: `${userInfo.fname} ${userInfo.lname}`,
+        profilePicURL: "",
+        bio: "",
+        dob: userInfo.dob,
+        cretedAt: serverTimestamp(),
+        followers: [],
+        following: [],
+        posts: [],
+      }
+
+      await setDoc(doc(db, "users", auth.currentUser.uid), newUser)
+
+      setUser(newUser)
+      localStorage.setItem("user", JSON.stringify(newUser))
+
+      setUserInfo({
+        fname: "",
+        lname: "",
+        uname: "",
+        dob: "",
+        pword: "",
+      })
+      setIsCompletingSignup(false)
+      navigate("/")
+    } catch (err) {
+      setErr(err.code)
+      setIsCompletingSignup(false)
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
   }
+
+  if (!isSignInWithEmailLink(auth, location.href)) {
+    return <Navigate to="/accounts" />
+  }
+
+  useEffect(() => {
+    let id = setTimeout(() => {
+      setErr("")
+    }, 3000)
+    return () => clearTimeout(id)
+  }, [err])
 
   return (
     <section className="complete-signup-section auth-section">
@@ -57,9 +156,9 @@ const CompleteSignupPage = () => {
             />
             <input
               type="date"
-              name="age"
-              id="age"
-              value={userInfo.age}
+              name="dob"
+              id="dob"
+              value={userInfo.dob}
               onChange={(e) => handleInput(e)}
             />
             <select name="gender" id="gender" ref={genderRef}>
@@ -79,8 +178,9 @@ const CompleteSignupPage = () => {
                 userInfo.fname &&
                 userInfo.lname &&
                 userInfo.uname &&
-                userInfo.age &&
-                userInfo.pword
+                userInfo.dob &&
+                userInfo.pword.length >= 6 &&
+                !isCompletingSignup
                   ? false
                   : true
               }
@@ -89,7 +189,7 @@ const CompleteSignupPage = () => {
               Complete Registration
             </button>
           </form>
-          {err ? <p className="err">err</p> : ""}
+          {err ? <p className="err">{err}</p> : ""}
         </div>
       </div>
     </section>
