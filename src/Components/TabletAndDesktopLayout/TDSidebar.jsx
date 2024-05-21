@@ -11,7 +11,7 @@ import { FaHeart, FaHouse } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { useGlobalContext } from "../../Context"
 
-const TDSidebar = ({ user }) => {
+const TDSidebar = ({ user, toggleSearchModal }) => {
   const { pathname } = useLocation()
   const { Auth, setUser } = useGlobalContext()
   const navigate = useNavigate()
@@ -43,7 +43,7 @@ const TDSidebar = ({ user }) => {
             <span className="text">Home</span>
           </Link>
         </li>
-        <li>
+        <li onClick={toggleSearchModal}>
           <Link to={null} className="tooltip">
             <SearchLogo />
             <span className="text">Search</span>
@@ -61,9 +61,13 @@ const TDSidebar = ({ user }) => {
             <span className="text">Create</span>
           </Link>
         </li>
-        <li className={pathname == userProfile ? "profile active" : "profile"}>
+        <li className={pathname == userProfile ? "profile  active" : "profile"}>
           <Link to={userProfile} className="tooltip">
-            <img className="user" src="/anonymous.jpg" alt="user" />
+            <img
+              className="user"
+              src={user?.profilePicURL || "/anonymous.jpg"}
+              alt={`${user?.firstName} ${user?.lastName}`}
+            />
             <span className="text">Profile</span>
           </Link>
         </li>

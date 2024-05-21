@@ -12,20 +12,27 @@ import ProfilePage from "./Pages/ProfilePage"
 
 import "react-loading-skeleton/dist/skeleton.css"
 import { useGlobalContext } from "./Context"
+import EditProfilePage from "./Pages/EditProfilePage"
 
 const App = () => {
   const { user } = useGlobalContext()
 
-  const canGoToHomePage = user || JSON.parse(localStorage.getItem("user"))
+  const isAuthorized = user || JSON.parse(localStorage.getItem("user"))
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route
           index
-          element={canGoToHomePage ? <HomePage /> : <Navigate to="/accounts" />}
+          element={isAuthorized ? <HomePage /> : <Navigate to="/accounts" />}
         />
         <Route path="user/:uid" element={<ProfilePage />} />
+        <Route
+          path="edit-profile"
+          element={
+            isAuthorized ? <EditProfilePage /> : <Navigate to="/accounts" />
+          }
+        />
         <Route path="*" element={<ErrorPage />} />
       </Route>
 

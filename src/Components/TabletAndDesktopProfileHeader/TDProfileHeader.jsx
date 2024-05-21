@@ -1,10 +1,32 @@
+import { useEffect } from "react"
 import { useGlobalContext } from "../../Context"
 import TDProfileHeaderSkeleton from "./TDProfileHeaderSkeleton"
+import { Link } from "react-router-dom"
 
 const TDProfileHeader = () => {
-  const { profile, isFetchingProfile, user } = useGlobalContext()
-  const visitingOwnProfile = user && user?.username === profile?.username
-  const visitingAnotherProfile = user && user?.username !== profile?.username
+  const {
+    profile,
+    isFetchingProfile,
+    user,
+    isFollowing,
+    setIsFollowing,
+    isHandlingFollowing,
+    User,
+  } = useGlobalContext()
+
+  const visitingOwnProfile = user?.username === profile?.username
+  const visitingAnotherProfile = user?.username !== profile?.username
+
+  const handleFollow = async () => {
+    await User.followUser(profile?.uid)
+  }
+
+  useEffect(() => {
+    if (visitingAnotherProfile) {
+      let isFollowing = user.following.includes(profile?.uid)
+      setIsFollowing(isFollowing)
+    }
+  }, [user, profile])
 
   if (!profile && !isFetchingProfile) {
     return null
@@ -16,12 +38,19 @@ const TDProfileHeader = () => {
 
   return (
     <section className="td-profile-header">
-      <img src="/profilepic.png" alt="user" />
+      <img
+        src={profile.profilePicURL || "/anonymous.jpg"}
+        alt={`${profile.firstName} ${profile.lastName}`}
+      />
       <div className="user-info">
         <div>
           <p>{profile.username}</p>
-          {visitingOwnProfile && <button>Edit Profile</button>}
-          {visitingAnotherProfile && <button>Follow</button>}
+          {visitingOwnProfile && <Link to="/edit-profile">Edit Profile</Link>}
+          {visitingAnotherProfile && (
+            <button disabled={isHandlingFollowing} onClick={handleFollow}>
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>
+          )}
         </div>
         <div>
           <p>
@@ -38,7 +67,7 @@ const TDProfileHeader = () => {
           </p>
         </div>
         <div>
-          <span>{profile.fullName}</span>
+          <span>{`${profile.firstName} ${profile.lastName}`}</span>
           <span>{profile.bio}</span>
         </div>
       </div>

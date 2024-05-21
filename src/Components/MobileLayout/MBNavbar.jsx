@@ -38,7 +38,11 @@ const MBNavbar = ({ user }) => {
       </li>
       <li className={pathname == userProfile ? "profile active" : "profile"}>
         <Link to={userProfile}>
-          <img className="user" src="/anonymous.jpg" alt="user" />
+          <img
+            className="user"
+            src={user?.profilePicURL || "/anonymous.jpg"}
+            alt={`${user?.firstName} ${user?.lastName}`}
+          />
         </Link>
       </li>
     </ul>

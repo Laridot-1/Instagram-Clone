@@ -1,15 +1,19 @@
-import { InstagramLogo, NotificationsLogo } from "../../assets/constants"
+import {
+  InstagramLogo,
+  NotificationsLogo,
+  SearchLogo,
+} from "../../assets/constants"
 
-const MBHeader = () => {
+const MBHeader = ({ toggleSearchModal }) => {
   return (
     <header className="mb-header">
       <div className="logo">
         <InstagramLogo />
       </div>
       <div>
-        <form>
-          <input type="search" name="search" id="search" placeholder="Search" />
-        </form>
+        <button onClick={toggleSearchModal}>
+          <SearchLogo />
+        </button>
         <NotificationsLogo />
       </div>
     </header>

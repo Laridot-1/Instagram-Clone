@@ -282,6 +282,9 @@ Desktop and Tablet Sidebar Styling
 
 .td-sidebar ul .profile img {
   width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .td-sidebar ul .profile.active img {
@@ -372,26 +375,15 @@ Mobile Header and navbar styling
 
 .mb-header > :last-child {
   gap: 1rem;
-  flex-grow: 1;
   display: flex;
   align-items: center;
 }
 
-.mb-header > :last-child form {
-  flex-grow: 1;
-  display: flex;
-  justify-content: end;
-}
-
-.mb-header > :last-child form input {
-  width: 100%;
+.mb-header > :last-child button {
   border: none;
   outline: none;
-  max-width: 300px;
-  font-size: inherit;
-  padding: 0.5rem 1rem;
-  border-radius: 0.4rem;
-  background-color: var(--border);
+  display: flex;
+  background-color: transparent;
 }
 
 .mb-header > :last-child svg {
@@ -427,7 +419,10 @@ Mobile Header and navbar styling
 }
 
 .mb-navbar .user {
-  width: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .mb-logout {
@@ -609,11 +604,24 @@ Homepage Styling
 }
 
 .suggested-user > div img {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   object-fit: cover;
   border-radius: 50%;
   object-position: center;
+}
+
+.suggested-user > div div {
+  display: grid;
+}
+
+.suggested-user > div div :first-child {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.suggested-user > div div :last-child {
+  font-size: 0.9rem;
 }
 
 .suggested-user button {
@@ -621,13 +629,98 @@ Homepage Styling
   outline: none;
   cursor: pointer;
   font-size: 0.95rem;
-  color: var(--dark-blue);
-  background-color: transparent;
+  color: var(--white);
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.5rem;
+  background-color: var(--dark-blue);
+}
+
+.suggested-user button[disabled] {
+  background-color: var(--blue);
 }
 
 @media screen and (max-width: 1024px) {
   .suggested-users {
     display: none;
+  }
+}
+
+.search-user-modal {
+  inset: 0;
+  top: 10%;
+  width: 80%;
+  gap: 1.5rem;
+  z-index: 10;
+  padding: 1rem;
+  display: flex;
+  margin: 0 auto;
+  max-width: 400px;
+  position: absolute;
+  height: fit-content;
+  border-radius: 0.45rem;
+  flex-direction: column;
+  background-color: var(--white);
+  box-shadow: 0 0 0.35rem -0.15rem var(--black);
+}
+
+.search-user-modal .header {
+  gap: 2rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-user-modal .header h3 {
+  color: var(--black);
+}
+
+.search-user-modal .header button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--dark-grey);
+  background-color: transparent;
+}
+
+.search-user-modal form {
+  gap: 1rem;
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.search-user-modal form input {
+  width: 100%;
+  outline: none;
+  font-size: 0.9rem;
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border: 1.5px solid var(--border);
+}
+
+.search-user-modal form button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--white);
+  border-radius: 0.45rem;
+  padding: 0.35rem 0.55rem;
+  background-color: var(--dark-grey);
+}
+
+.search-user-modal form button[disabled] {
+  background-color: var(--light-grey);
+}
+
+.search-user-modal .no-user {
+  text-align: center;
+  color: var(--dark-grey);
+}
+
+@media screen and (min-width: 800px) {
+  .search-user-modal {
+    top: 5%;
+    left: 15%;
+    margin: 0;
   }
 }
 
@@ -664,6 +757,7 @@ Profile Page styling
 .td-profile-header img {
   width: 10rem;
   height: 10rem;
+  object-fit: cover;
   border-radius: 50%;
 }
 
@@ -680,6 +774,8 @@ Profile Page styling
   align-items: center;
 }
 
+.td-profile-header .user-info > :first-child a,
+.mb-profile-header > :first-child > div a,
 .td-profile-header .user-info > :first-child button,
 .mb-profile-header > :first-child > div button {
   border: none;
@@ -691,6 +787,11 @@ Profile Page styling
   padding: 0.65rem 1rem;
   border-radius: 0.5rem;
   background-color: var(--dark-grey);
+}
+
+.td-profile-header .user-info > :first-child button[disabled],
+.mb-profile-header > :first-child > div button[disabled] {
+  background-color: var(--light-grey);
 }
 
 .td-profile-header .user-info > :nth-child(2) {
@@ -718,6 +819,7 @@ Profile Page styling
 .mb-profile-header > :first-child img {
   width: 5rem;
   height: 5rem;
+  object-fit: cover;
   border-radius: 50%;
 }
 
@@ -988,12 +1090,121 @@ End of Profile Page styling
 ===========================
 */
 
+/*
+=================
+Edit Profile Page
+=================
+*/
+
+.edit-profile-page .err {
+  color: var(--red);
+  padding-top: 1rem;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.edit-profile-page form {
+  gap: 1.5rem;
+  margin: auto;
+  display: flex;
+  max-width: 400px;
+  flex-direction: column;
+}
+
+.edit-profile-page form > div:first-child {
+  gap: 1rem;
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  border-radius: 0.5rem;
+  justify-content: space-between;
+  background-color: var(--border);
+}
+
+.edit-profile-page form > div:first-child img {
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+  border: 1px solid var(--dark-grey);
+}
+
+.edit-profile-page form > div:first-child label {
+  cursor: pointer;
+  padding: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--white);
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  background-color: var(--dark-blue);
+}
+
+.edit-profile-page label {
+  gap: 0.65rem;
+  display: grid;
+}
+
+.edit-profile-page label span {
+  font-weight: 600;
+}
+
+.edit-profile-page label input,
+.edit-profile-page label select,
+.edit-profile-page label textarea {
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  outline-color: var(--dark-grey);
+}
+
+.edit-profile-page label textarea {
+  height: 5rem;
+}
+
+.edit-profile-page form > div:last-child {
+  gap: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.edit-profile-page form > div:last-child button,
+.edit-profile-page form > div:last-child a {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--white);
+  padding: 0.65rem 1rem;
+  border-radius: 0.45rem;
+}
+
+.edit-profile-page form > div:last-child :first-child {
+  background-color: var(--red);
+}
+
+.edit-profile-page form > div:last-child :last-child {
+  background-color: var(--dark-blue);
+}
+
+.edit-profile-page form > div:last-child :last-child[disabled] {
+  background-color: var(--blue);
+}
+
+/*
+========================
+End of Edit Profile Page
+========================
+*/
+
 :root {
   --white: hsl(0, 0%, 100%);
   --grey: hsl(0, 0%, 98.04%);
   --black: hsl(0, 0%, 14.9%);
   --border: hsl(0, 0%, 85.88%);
   --dark-grey: hsl(0, 0%, 21.18%);
+  --light-grey: hsl(0, 0%, 40%);
   --red: hsl(354.88, 83.23%, 69.61%);
   --blue: hsl(203.58, 93.51%, 63.73%);
   --dark-blue: hsl(203.66, 100%, 48.24%);

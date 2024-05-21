@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { auth, db } from "./firebase"
 import {
   onAuthStateChanged,
@@ -8,11 +8,14 @@ import {
   signOut,
 } from "firebase/auth"
 import {
+  arrayRemove,
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore"
 
@@ -22,8 +25,14 @@ const useGlobalContext = () => useContext(AppContext)
 
 const Context = ({ children }) => {
   const [user, setUser] = useState(null)
+
+  //Profile States
   const [profile, setProfile] = useState(null)
   const [isFetchingProfile, setIsFetchingProfile] = useState(true)
+
+  //Following States
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
 
   class Auth {
     static signup(email) {
@@ -74,28 +83,98 @@ const Context = ({ children }) => {
         setIsFetchingProfile(false)
       }
     }
+    static async getUser() {
+      try {
+        const currentUser = await getDoc(doc(db, "users", user?.uid))
+        setUser(currentUser.data())
+      } catch (err) {
+        alert(err.message)
+      }
+    }
+    static async followUser(uid) {
+      setIsHandlingFollowing(true)
+
+      try {
+        await updateDoc(doc(db, "users", user.uid), {
+          following: isFollowing ? arrayRemove(uid) : arrayUnion(uid),
+        })
+        await updateDoc(doc(db, "users", uid), {
+          followers: isFollowing ? arrayRemove(user.uid) : arrayUnion(user.uid),
+        })
+
+        if (isFollowing) {
+          setUser({
+            ...user,
+            following: user.following.filter((uid) => uid !== uid),
+          })
+
+          if (profile) {
+            setProfile({
+              ...profile,
+              followers: profile.followers.filter((uid) => uid !== user.uid),
+            })
+          }
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              ...user,
+              following: user.following.filter((uid) => uid !== uid),
+            })
+          )
+
+          setIsFollowing(false)
+        } else {
+          setUser({
+            ...user,
+            following: [...user.following, uid],
+          })
+
+          if (profile) {
+            setProfile({
+              ...profile,
+              followers: [...profile.followers, user.uid],
+            })
+          }
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              ...user,
+              following: [...user.following, uid],
+            })
+          )
+
+          setIsFollowing(true)
+        }
+
+        setIsHandlingFollowing(false)
+      } catch (err) {
+        alert(err.message)
+        setIsHandlingFollowing(false)
+      }
+    }
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (res) => {
-      if (res) {
-        try {
-          const currentUser = await getDoc(doc(db, "users", res.uid))
-          setUser(currentUser.data())
-          localStorage.setItem("user", JSON.stringify(currentUser.data()))
-        } catch (err) {
-          alert(err.message)
-        }
-      } else {
-        setUser(null)
-        localStorage.removeItem("user")
-      }
+    const unsubscribe = onAuthStateChanged(auth, (res) => {
+      setUser(res)
     })
 
     return () => unsubscribe()
   }, [])
 
-  const obj = { Auth, User, user, setUser, profile, isFetchingProfile }
+  const obj = {
+    Auth,
+    User,
+    user,
+    setUser,
+    profile,
+    isFetchingProfile,
+    isFollowing,
+    setIsFollowing,
+    isHandlingFollowing,
+  }
 
   return <AppContext.Provider value={obj}>{children}</AppContext.Provider>
 }
