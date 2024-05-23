@@ -3,10 +3,11 @@ import { FaTrash } from "react-icons/fa6"
 import Comments from "../Comments/Comments"
 import { FaTimes } from "react-icons/fa"
 import { useState } from "react"
-import ProfilePostSkeleton from "./ProfilePostSkeleton"
+import { useGlobalContext } from "../../Context"
 
-const ProfilePost = () => {
+const ProfilePost = ({ post }) => {
   const [isModalShown, setIsModalShown] = useState(false)
+  const { profile } = useGlobalContext()
 
   const openModal = () => setIsModalShown(true)
   const closeModal = () => setIsModalShown(false)
@@ -14,15 +15,17 @@ const ProfilePost = () => {
   return (
     <>
       <section className="profile-post" onClick={openModal}>
-        <img src="/img1.png" alt="post" />
+        <div className="img-wrapper">
+          <img src={post.imageUrl} alt="post" />
+        </div>
         <div className={isModalShown ? "overlay overlay-hide" : "overlay"}>
           <div>
             <NotificationsLogo />
-            <span>24,376</span>
+            <span>{post?.likes.length}</span>
           </div>
           <div>
             <CommentLogo />
-            <span>3,674</span>
+            <span>{post?.comments.length}</span>
           </div>
         </div>
       </section>
@@ -33,14 +36,17 @@ const ProfilePost = () => {
             : "profile-modal-overlay"
         }
       >
-        <FaTimes onClick={closeModal} />
+        <div className="icons">
+          <FaTimes onClick={closeModal} />
+          <FaTrash className="mb-trash" />
+        </div>
         <section className="profile-modal">
-          <img src="/img1.png" alt="post" />
+          <img src={post.imageUrl} alt="post" />
           <div className="modal-comment">
             <div className="modal-header">
               <div>
-                <img src="/profilepic.png" alt="profile pic" />
-                <p>username</p>
+                <img src={profile.profilePicURL} alt={profile?.username} />
+                <p>{profile?.username}</p>
               </div>
               <FaTrash />
             </div>
@@ -51,7 +57,7 @@ const ProfilePost = () => {
                 <CommentLogo />
               </div>
               <div>
-                <span>24,376</span>
+                <span>{post.likes.length}</span>
                 <span>likes</span>
               </div>
               <p>2d ago</p>

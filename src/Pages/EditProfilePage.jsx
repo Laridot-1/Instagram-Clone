@@ -13,7 +13,7 @@ import {
 import { useGlobalContext } from "../Context"
 
 const EditProfilePage = () => {
-  const user = useOutletContext()
+  const { user } = useOutletContext()
   const [src, setSrc] = useState("")
   const [userInfo, setUserInfo] = useState({
     fName: "",

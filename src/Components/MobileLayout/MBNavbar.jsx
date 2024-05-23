@@ -5,7 +5,7 @@ import { TiHomeOutline } from "react-icons/ti"
 import { FaSignOutAlt } from "react-icons/fa"
 import { useGlobalContext } from "../../Context"
 
-const MBNavbar = ({ user }) => {
+const MBNavbar = ({ user, toggleCreateModal }) => {
   const { pathname } = useLocation()
   const { Auth, setUser } = useGlobalContext()
   const navigate = useNavigate()
@@ -28,7 +28,7 @@ const MBNavbar = ({ user }) => {
       <li>
         <Link to="/">{pathname == "/" ? <FaHouse /> : <TiHomeOutline />}</Link>
       </li>
-      <li>
+      <li onClick={toggleCreateModal}>
         <Link to={null}>
           <CreatePostLogo />
         </Link>

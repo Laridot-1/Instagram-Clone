@@ -645,7 +645,7 @@ Homepage Styling
   }
 }
 
-.search-user-modal {
+.search-user-modal .modal-content {
   inset: 0;
   top: 10%;
   width: 80%;
@@ -661,6 +661,14 @@ Homepage Styling
   flex-direction: column;
   background-color: var(--white);
   box-shadow: 0 0 0.35rem -0.15rem var(--black);
+}
+
+.search-user-modal .modal-overlay,
+.create-post-modal .modal-overlay {
+  inset: 0;
+  z-index: 5;
+  position: absolute;
+  background-color: hsl(0 0% 0% / 0.35);
 }
 
 .search-user-modal .header {
@@ -724,6 +732,109 @@ Homepage Styling
   }
 }
 
+.create-post-modal .modal-content {
+  inset: 0;
+  top: 10%;
+  gap: 1rem;
+  width: 80%;
+  height: 500px;
+  display: grid;
+  margin: 0 auto;
+  max-width: 450px;
+  position: absolute;
+  padding-bottom: 1rem;
+  border-radius: 0.5rem;
+  grid-template-rows: auto 1fr;
+  background-color: var(--grey);
+  box-shadow: 0 0 0.4rem -0.15rem var(--dark-grey);
+}
+
+.create-post-modal .header {
+  gap: 2rem;
+  display: flex;
+  padding: 0.85rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.create-post-modal .header button {
+  border: none;
+  outline: none;
+  display: flex;
+  cursor: pointer;
+  font-size: 1.2rem;
+  background-color: transparent;
+}
+
+.create-post-modal .body {
+  gap: 1rem;
+  display: grid;
+  overflow: hidden;
+  padding-inline: 1rem;
+  grid-template-rows: auto auto 1fr auto;
+}
+
+.create-post-modal form:first-of-type textarea {
+  width: 100%;
+  resize: none;
+  height: 5rem;
+  outline: none;
+  padding: 0.65rem;
+  font-size: 0.95rem;
+  border-radius: 0.45rem;
+  border: 1.5px solid var(--border);
+}
+
+.create-post-modal form:last-of-type label {
+  display: block;
+  cursor: pointer;
+  font-weight: 600;
+  width: fit-content;
+  color: var(--white);
+  border-radius: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  background-color: var(--dark-blue);
+}
+
+.create-post-modal .img-preview {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border);
+}
+
+.create-post-modal img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.create-post-modal .body button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--white);
+  justify-self: center;
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  background-color: var(--dark-blue);
+}
+
+.create-post-modal .body button[disabled] {
+  background-color: var(--blue);
+}
+
+@media screen and (min-width: 700px) {
+  .create-post-modal .modal-content {
+    top: 5%;
+    margin: 0;
+    left: 15%;
+  }
+}
+
 /*
 =======================
 End of Homepage Styling
@@ -757,6 +868,8 @@ Profile Page styling
 .td-profile-header img {
   width: 10rem;
   height: 10rem;
+  display: flex;
+  flex-shrink: 0;
   object-fit: cover;
   border-radius: 50%;
 }
@@ -774,6 +887,11 @@ Profile Page styling
   align-items: center;
 }
 
+.td-profile-header .user-info > :first-child p {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 .td-profile-header .user-info > :first-child a,
 .mb-profile-header > :first-child > div a,
 .td-profile-header .user-info > :first-child button,
@@ -784,8 +902,8 @@ Profile Page styling
   font-weight: 600;
   font-size: 0.85rem;
   color: var(--white);
-  padding: 0.65rem 1rem;
   border-radius: 0.5rem;
+  padding: 0.45rem 0.85rem;
   background-color: var(--dark-grey);
 }
 
@@ -802,8 +920,14 @@ Profile Page styling
 
 .td-profile-header .user-info > :last-child,
 .mb-profile-header > :nth-child(2) {
+  gap: 0.35rem;
   display: flex;
   flex-direction: column;
+}
+
+.td-profile-header .user-info > :last-child :last-child,
+.mb-profile-header > :nth-child(2) :last-child {
+  font-size: 0.95rem;
 }
 
 .mb-profile-header {
@@ -827,6 +951,10 @@ Profile Page styling
   gap: 0.5rem;
   display: flex;
   align-items: center;
+}
+
+.mb-profile-header > :first-child > div :first-child {
+  font-weight: 600;
 }
 
 @media screen and (max-width: 300px) {
@@ -861,17 +989,31 @@ Profile Page styling
   grid-template-columns: repeat(3, 1fr);
 }
 
+.no-post-found {
+  padding-top: 1rem;
+  text-align: center;
+}
+
 .profile-post {
   cursor: pointer;
   min-width: 70px;
   overflow: hidden;
   position: relative;
+  border: 1.5px solid var(--border);
+}
+
+.profile-post .img-wrapper {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  max-height: 350px;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile-post > img {
-  max-height: 350px;
+  max-height: 100%;
   object-fit: cover;
-  object-position: center;
 }
 
 .profile-post .overlay {
@@ -915,25 +1057,36 @@ Profile Page styling
   display: block;
 }
 
-.profile-modal-overlay > svg {
+.profile-modal-overlay > .icons {
   top: 1rem;
-  right: 1rem;
+  width: 100%;
   z-index: 10;
-  cursor: pointer;
-  font-size: 1.5rem;
   position: absolute;
+  padding-inline: 1rem;
+}
+
+.profile-modal-overlay > .icons svg {
+  cursor: pointer;
+  font-size: 1.25rem;
   color: var(--white);
+}
+
+.profile-modal-overlay > .icons .mb-trash {
+  right: 1rem;
+  display: none;
+  position: absolute;
 }
 
 .profile-modal {
   inset: 0;
+  top: 10%;
   gap: 1rem;
   width: 90%;
   z-index: 4;
   height: 80%;
-  margin: auto;
   display: flex;
   padding: 1rem;
+  margin: 0 auto;
   overflow: hidden;
   max-width: 750px;
   max-height: 500px;
@@ -973,7 +1126,12 @@ Profile Page styling
 .profile-modal .modal-comment .modal-header img {
   width: 3rem;
   height: 3rem;
+  object-fit: cover;
   border-radius: 50%;
+}
+
+.profile-modal .modal-comment .modal-header p {
+  font-weight: 600;
 }
 
 .profile-modal .modal-comment .modal-header svg {
@@ -1075,8 +1233,17 @@ Profile Page styling
     flex-direction: column;
   }
 
+  .profile-modal {
+    top: 0;
+    margin: auto;
+  }
+
   .profile-modal > img {
     width: 100%;
+  }
+
+  .profile-modal-overlay > .icons .mb-trash {
+    display: initial;
   }
 
   .profile-modal .modal-comment {
@@ -1161,6 +1328,7 @@ Edit Profile Page
 
 .edit-profile-page label textarea {
   height: 5rem;
+  resize: none;
 }
 
 .edit-profile-page form > div:last-child {

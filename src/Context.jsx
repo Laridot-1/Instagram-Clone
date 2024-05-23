@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { auth, db } from "./firebase"
+import { auth, db, storage } from "./firebase"
 import {
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -8,16 +8,20 @@ import {
   signOut,
 } from "firebase/auth"
 import {
+  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
+  serverTimestamp,
   updateDoc,
   where,
 } from "firebase/firestore"
+import { getDownloadURL, ref, uploadString } from "firebase/storage"
 
 const AppContext = createContext()
 
@@ -33,6 +37,11 @@ const Context = ({ children }) => {
   //Following States
   const [isFollowing, setIsFollowing] = useState(false)
   const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
+
+  //Create Post States
+  const [posts, setPosts] = useState([])
+  const [isCreatingpost, setIsCreatingPost] = useState(false)
+  const [isFetchingPost, setIsFetchingPost] = useState(true)
 
   class Auth {
     static signup(email) {
@@ -154,6 +163,80 @@ const Context = ({ children }) => {
         setIsHandlingFollowing(false)
       }
     }
+    static async createPost(selectedImage, caption) {
+      if (isCreatingpost) {
+        return
+      }
+      if (!selectedImage) {
+        return alert("Please select an image")
+      }
+      setIsCreatingPost(true)
+      const newPost = {
+        caption,
+        likes: [],
+        comments: [],
+        createdAt: serverTimestamp(),
+        createdBy: user.uid,
+      }
+
+      try {
+        let postId = await addDoc(collection(db, "posts"), newPost)
+        await updateDoc(doc(db, "users", user.uid), {
+          posts: arrayUnion(postId.id),
+        })
+        await uploadString(
+          ref(storage, `posts/${postId.id}`),
+          selectedImage,
+          "data_url"
+        )
+
+        let url = await getDownloadURL(ref(storage, `posts/${postId.id}`))
+
+        await updateDoc(postId, {
+          imageUrl: url,
+        })
+
+        newPost.imageUrl = url
+        newPost.id = postId.id
+
+        setPosts([newPost, ...posts])
+        setProfile({ ...profile, posts: [newPost.id, ...profile.posts] })
+
+        alert("Post uploaded successfully")
+        setIsCreatingPost(false)
+      } catch (err) {
+        alert(err.message)
+        setIsCreatingPost(false)
+      }
+    }
+    static async getPosts() {
+      if (!profile) return
+      setIsFetchingPost(true)
+      setPosts([])
+
+      try {
+        let q = query(
+          collection(db, "posts"),
+          where("createdBy", "==", profile.uid)
+        )
+        let querySnapshot = await getDocs(q)
+
+        let posts = []
+
+        querySnapshot.forEach((doc) => {
+          posts.push({ ...doc.data(), id: doc.id })
+        })
+
+        posts.sort((a, b) => b.createdAt - a.createdAt)
+
+        setPosts(posts)
+
+        setIsFetchingPost(false)
+      } catch (err) {
+        alert(err.message)
+        setIsFetchingPost(false)
+      }
+    }
   }
 
   useEffect(() => {
@@ -174,6 +257,9 @@ const Context = ({ children }) => {
     isFollowing,
     setIsFollowing,
     isHandlingFollowing,
+    posts,
+    isCreatingpost,
+    isFetchingPost,
   }
 
   return <AppContext.Provider value={obj}>{children}</AppContext.Provider>

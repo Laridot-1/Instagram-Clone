@@ -35,24 +35,28 @@ const SearchUserModal = ({ closeModal }) => {
 
   return (
     <section className="search-user-modal">
-      <div className="header">
-        <h3>Search User</h3>
-        <button onClick={closeModal}>
-          <FaTimes />
-        </button>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <div className="header">
+            <h3>Search User</h3>
+            <button onClick={closeModal}>
+              <FaTimes />
+            </button>
+          </div>
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <button disabled={isSearching}>Search</button>
+          </form>
+          {user && !isSearching && <SuggestedUser user={user} />}
+          {!user && !isSearching && <p className="no-user">No user to show</p>}
+          {!user && isSearching && <SuggestedUserSkeleton />}
+        </div>
       </div>
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button disabled={isSearching}>Search</button>
-      </form>
-      {user && !isSearching && <SuggestedUser user={user} />}
-      {!user && !isSearching && <p className="no-user">No user to show</p>}
-      {!user && isSearching && <SuggestedUserSkeleton />}
     </section>
   )
 }

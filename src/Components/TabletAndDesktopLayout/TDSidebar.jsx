@@ -11,7 +11,7 @@ import { FaHeart, FaHouse } from "react-icons/fa6"
 import { FaSignOutAlt } from "react-icons/fa"
 import { useGlobalContext } from "../../Context"
 
-const TDSidebar = ({ user, toggleSearchModal }) => {
+const TDSidebar = ({ user, toggleSearchModal, toggleCreateModal }) => {
   const { pathname } = useLocation()
   const { Auth, setUser } = useGlobalContext()
   const navigate = useNavigate()
@@ -55,7 +55,7 @@ const TDSidebar = ({ user, toggleSearchModal }) => {
             <span className="text">Notifications</span>
           </Link>
         </li>
-        <li>
+        <li onClick={toggleCreateModal}>
           <Link to={null} className="tooltip">
             <CreatePostLogo />
             <span className="text">Create</span>
