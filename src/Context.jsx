@@ -12,6 +12,7 @@ import {
   arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -21,7 +22,12 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore"
-import { getDownloadURL, ref, uploadString } from "firebase/storage"
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadString,
+} from "firebase/storage"
 
 const AppContext = createContext()
 
@@ -40,8 +46,10 @@ const Context = ({ children }) => {
 
   //Create Post States
   const [posts, setPosts] = useState([])
-  const [isCreatingpost, setIsCreatingPost] = useState(false)
+  const [isCreatingPost, setIsCreatingPost] = useState(false)
   const [isFetchingPost, setIsFetchingPost] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isCommenting, setIsCommenting] = useState(false)
 
   class Auth {
     static signup(email) {
@@ -68,6 +76,7 @@ const Context = ({ children }) => {
 
   class User {
     static async getUserProfile(username) {
+      setProfile(null)
       try {
         setIsFetchingProfile(true)
         const q = query(
@@ -164,7 +173,7 @@ const Context = ({ children }) => {
       }
     }
     static async createPost(selectedImage, caption) {
-      if (isCreatingpost) {
+      if (isCreatingPost) {
         return
       }
       if (!selectedImage) {
@@ -210,9 +219,9 @@ const Context = ({ children }) => {
       }
     }
     static async getPosts() {
-      if (!profile) return
-      setIsFetchingPost(true)
       setPosts([])
+      setIsFetchingPost(true)
+      if (!profile) return
 
       try {
         let q = query(
@@ -237,6 +246,72 @@ const Context = ({ children }) => {
         setIsFetchingPost(false)
       }
     }
+    static async deletePost(id) {
+      if (!confirm("Are you sure you want to delete this post?")) {
+        return
+      }
+      if (isDeleting) {
+        return
+      }
+      setIsDeleting(true)
+
+      try {
+        await deleteObject(ref(storage, `posts/${id}`))
+        await deleteDoc(doc(db, "posts", id))
+        await updateDoc(doc(db, "users", user.uid), {
+          posts: arrayRemove(id),
+        })
+
+        const newPosts = posts.filter((postId) => postId !== id)
+        setPosts(newPosts)
+        setProfile({
+          ...profile,
+          posts: profile.posts.filter((postId) => postId !== id),
+        })
+        setIsDeleting(false)
+      } catch (err) {
+        alert(err.message)
+        setIsDeleting(false)
+      }
+    }
+    static async addComment(postId, comment) {
+      if (!user) {
+        return
+      }
+      if (isCommenting) {
+        return
+      }
+      setIsCommenting(true)
+
+      const newComment = {
+        postId,
+        comment,
+        createdAt: Date.now(),
+        createdBy: user.uid,
+      }
+
+      try {
+        await updateDoc(doc(db, "posts", postId), {
+          comments: arrayUnion(newComment),
+        })
+
+        const updatedPosts = posts.map((post) => {
+          if (post.id === postId) {
+            return {
+              ...post,
+              comments: [...post.comments, newComment],
+            }
+          }
+          return post
+        })
+        setPosts(updatedPosts)
+
+        setIsCommenting(false)
+      } catch (err) {
+        alert(err.message)
+        setIsCommenting(false)
+      }
+    }
   }
 
   useEffect(() => {
@@ -258,8 +333,10 @@ const Context = ({ children }) => {
     setIsFollowing,
     isHandlingFollowing,
     posts,
-    isCreatingpost,
+    isCreatingPost,
     isFetchingPost,
+    isDeleting,
+    isCommenting,
   }
 
   return <AppContext.Provider value={obj}>{children}</AppContext.Provider>

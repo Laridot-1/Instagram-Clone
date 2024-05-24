@@ -1,15 +1,11 @@
 import Comment from "./Comment"
 
-const Comments = () => {
+const Comments = ({ comments }) => {
   return (
     <section className="profile-comments">
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
+      {comments.map((comment) => {
+        return <Comment comment={comment} key={comment.createdAt} />
+      })}
     </section>
   )
 }

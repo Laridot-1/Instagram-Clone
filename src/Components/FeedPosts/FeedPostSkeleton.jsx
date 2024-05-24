@@ -5,7 +5,7 @@ const FeedPostShadow = () => {
     <div
       style={{
         gap: "0.5rem",
-        width: "100%",
+        width: "73%",
         margin: "auto",
         display: "flex",
         maxWidth: "450px",

@@ -1065,6 +1065,12 @@ Profile Page styling
   padding-inline: 1rem;
 }
 
+.profile-modal-overlay > .icons button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
 .profile-modal-overlay > .icons svg {
   cursor: pointer;
   font-size: 1.25rem;
@@ -1134,12 +1140,43 @@ Profile Page styling
   font-weight: 600;
 }
 
+.profile-modal .modal-comment .modal-header button {
+  border: none;
+  outline: none;
+  display: flex;
+  background-color: transparent;
+}
+
 .profile-modal .modal-comment .modal-header svg {
   cursor: pointer;
   font-size: 1.15rem;
 }
 
+.profile-modal .modal-comment .comment-body {
+  gap: 1rem;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+}
+
+.profile-modal .modal-comment .caption {
+  gap: 0.5rem;
+  display: flex;
+  max-height: 20%;
+  overflow-y: auto;
+  align-items: start;
+}
+
+.profile-modal .modal-comment .caption :last-child {
+  font-size: 0.85rem;
+}
+
+.profile-modal .modal-comment .caption :first-child {
+  font-weight: 600;
+}
+
 .profile-comments {
+  flex: 1;
   gap: 0.85rem;
   display: flex;
   overflow-y: auto;
@@ -1155,18 +1192,32 @@ Profile Page styling
 .profile-comment img {
   width: 2rem;
   height: 2rem;
+  flex-shrink: 0;
+  cursor: pointer;
   object-fit: cover;
   border-radius: 50%;
   object-position: center;
 }
 
-.profile-comment div {
+.profile-comment div div {
   gap: 0.85rem;
   display: flex;
+  align-items: start;
 }
 
-.profile-comment div :first-child {
+.profile-comment div div :first-child {
+  cursor: pointer;
   font-weight: 600;
+  color: var(--black);
+}
+
+.profile-comment div div p {
+  font-size: 0.9rem;
+}
+
+.profile-comment > div > p {
+  font-size: 0.8rem;
+  color: var(--light-grey);
 }
 
 .profile-modal .modal-comment .modal-footer {
@@ -1203,7 +1254,7 @@ Profile Page styling
   width: 100%;
   border: none;
   outline: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   background-color: transparent;
 }
 
