@@ -460,12 +460,29 @@ Homepage Styling
 
 .feedposts {
   gap: 2rem;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+}
+
+.feedposts .no-post {
+  text-align: center;
+  color: var(--dark-grey);
+}
+
+.feedposts .suggested-users {
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 1025px) {
+  .homepage .feedposts .suggested-users {
+    display: none;
+  }
 }
 
 .feedpost {
   gap: 0.5rem;
   width: 100%;
+  margin: auto;
   display: flex;
   max-width: 400px;
   justify-self: center;
@@ -486,20 +503,21 @@ Homepage Styling
 }
 
 .feedpost .post-heading .user img {
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   object-fit: cover;
   border-radius: 50%;
   object-position: center;
 }
 
-.feedpost .post-heading .user .u-info :first-child {
+.feedpost .post-heading .user .u-info :first-child span {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  color: var(--black);
 }
 
 .feedpost .post-heading .user .u-info :last-child {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .feedpost .post-heading button {
@@ -557,20 +575,24 @@ Homepage Styling
   background-color: transparent;
 }
 
-.feedpost .post-footer form {
+.feedpost .post-footer > form,
+.feedpost-comments-modal form {
   display: flex;
   padding-bottom: 1rem;
   border-bottom: 1.5px solid var(--border);
 }
 
-.feedpost .post-footer form input {
+.feedpost .post-footer > form input,
+.feedpost-comments-modal form input {
   width: 100%;
   border: none;
   outline: none;
   font-size: 0.95rem;
+  background-color: transparent;
 }
 
-.feedpost .post-footer form button {
+.feedpost .post-footer > form button,
+.feedpost-comments-modal form button {
   border: none;
   outline: none;
   cursor: pointer;
@@ -578,14 +600,16 @@ Homepage Styling
   background-color: transparent;
 }
 
-.suggested-users {
+.homepage > .suggested-users,
+.feedposts .suggested-users {
   gap: 0.5rem;
   width: 300px;
   display: flex;
   flex-direction: column;
 }
 
-.suggested-users > p {
+.homepage > .suggested-users > p,
+.feedposts .suggested-users > p {
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
@@ -615,9 +639,10 @@ Homepage Styling
   display: grid;
 }
 
-.suggested-user > div div :first-child {
+.suggested-user > div div :first-child span {
   font-weight: 600;
   font-size: 0.95rem;
+  color: var(--black);
 }
 
 .suggested-user > div div :last-child {
@@ -640,7 +665,7 @@ Homepage Styling
 }
 
 @media screen and (max-width: 1024px) {
-  .suggested-users {
+  .homepage > .suggested-users {
     display: none;
   }
 }
@@ -732,7 +757,8 @@ Homepage Styling
   }
 }
 
-.create-post-modal .modal-content {
+.create-post-modal .modal-content,
+.feedpost-comments-modal {
   inset: 0;
   top: 10%;
   gap: 1rem;
@@ -749,7 +775,8 @@ Homepage Styling
   box-shadow: 0 0 0.4rem -0.15rem var(--dark-grey);
 }
 
-.create-post-modal .header {
+.create-post-modal .header,
+.feedpost-comments-modal .header {
   gap: 2rem;
   display: flex;
   padding: 0.85rem;
@@ -758,7 +785,8 @@ Homepage Styling
   border-bottom: 1.5px solid var(--border);
 }
 
-.create-post-modal .header button {
+.create-post-modal .header button,
+.feedpost-comments-modal .header button {
   border: none;
   outline: none;
   display: flex;
@@ -833,6 +861,32 @@ Homepage Styling
     margin: 0;
     left: 15%;
   }
+}
+
+.feedpost-comments-modal-overlay {
+  inset: 0;
+  z-index: 10;
+  position: absolute;
+  background-color: hsl(0 0% 0% / 0.35);
+}
+
+.feedpost-comments-modal-body {
+  display: grid;
+  overflow: hidden;
+  padding-inline: 1rem;
+  grid-template-rows: 1fr auto;
+}
+
+.feedpost-comments-modal-body .body {
+  overflow-y: auto;
+}
+
+.feedpost-comments-modal-body form {
+  padding-top: 1rem;
+}
+
+.feedpost-comments-modal-body form {
+  border-top: 1.5px solid var(--border);
 }
 
 /*
@@ -998,8 +1052,15 @@ Profile Page styling
   cursor: pointer;
   min-width: 70px;
   overflow: hidden;
+  min-height: 250px;
   position: relative;
   border: 1.5px solid var(--border);
+}
+
+@media screen and (max-width: 600px) {
+  .profile-post {
+    min-height: 100px;
+  }
 }
 
 .profile-post .img-wrapper {

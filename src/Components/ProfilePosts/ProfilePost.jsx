@@ -1,16 +1,25 @@
-import { NotificationsLogo, CommentLogo } from "../../assets/constants"
+import {
+  NotificationsLogo,
+  CommentLogo,
+  UnlikeLogo,
+} from "../../assets/constants"
 import { FaTrash } from "react-icons/fa6"
 import Comments from "../Comments/Comments"
 import { FaTimes } from "react-icons/fa"
 import { useRef, useState } from "react"
 import { useGlobalContext } from "../../Context"
 import { timeAgo } from "../../Utils/timeAgo"
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore"
+import { db } from "../../firebase"
 
 const ProfilePost = ({ post }) => {
   const [isModalShown, setIsModalShown] = useState(false)
-  const { profile, user, User, isDeleting, isCommenting } = useGlobalContext()
+  const { profile, user, User, isDeleting, isCommenting, posts, setPosts } =
+    useGlobalContext()
   const [comment, setComment] = useState("")
   const commentRef = useRef(null)
+  const [isLiked, setIsLiked] = useState(post?.likes.includes(user?.uid))
+  const [isLiking, setIsLiking] = useState(false)
 
   const openModal = () => setIsModalShown(true)
   const closeModal = () => setIsModalShown(false)
@@ -22,6 +31,37 @@ const ProfilePost = ({ post }) => {
   const handleComment = async () => {
     await User.addComment(post.id, comment)
     setComment("")
+  }
+
+  const handleLike = async () => {
+    if (isLiking) return
+    if (!user) return alert("You need to be logged in.")
+
+    setIsLiking(true)
+
+    try {
+      await updateDoc(doc(db, "posts", post.id), {
+        likes: isLiked ? arrayRemove(user.uid) : arrayUnion(user.uid),
+      })
+      setIsLiked(!isLiked)
+      setPosts(
+        posts.map((singlePost) => {
+          if (singlePost.id === post.id) {
+            return {
+              ...singlePost,
+              likes: isLiked
+                ? singlePost.likes.filter((id) => id !== user.uid)
+                : [...singlePost.likes, user.uid],
+            }
+          }
+          return singlePost
+        })
+      )
+      setIsLiking(false)
+    } catch (err) {
+      alert(err.message)
+      setIsLiked(false)
+    }
   }
 
   let time
@@ -93,8 +133,9 @@ const ProfilePost = ({ post }) => {
                     cursor: "pointer",
                     backgroundColor: "transparent",
                   }}
+                  onClick={handleLike}
                 >
-                  <NotificationsLogo />
+                  {isLiked ? <UnlikeLogo /> : <NotificationsLogo />}
                 </button>
                 <button
                   style={{
@@ -110,7 +151,7 @@ const ProfilePost = ({ post }) => {
                 </button>
               </div>
               <div>
-                <span>{post.likes.length}</span>
+                <span>{post?.likes.length}</span>
                 <span>likes</span>
               </div>
               <p>{timeAgo(time)}</p>

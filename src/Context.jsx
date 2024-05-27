@@ -51,6 +51,9 @@ const Context = ({ children }) => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [isCommenting, setIsCommenting] = useState(false)
 
+  //FeedPosts States
+  const [isFetchingFeedPosts, setIsFetchingFeedPosts] = useState(true)
+
   class Auth {
     static signup(email) {
       const actionCodeSettings = {
@@ -179,7 +182,9 @@ const Context = ({ children }) => {
       if (!selectedImage) {
         return alert("Please select an image")
       }
+
       setIsCreatingPost(true)
+
       const newPost = {
         caption,
         likes: [],
@@ -209,7 +214,9 @@ const Context = ({ children }) => {
         newPost.id = postId.id
 
         setPosts([newPost, ...posts])
-        setProfile({ ...profile, posts: [newPost.id, ...profile.posts] })
+        if (profile) {
+          setProfile({ ...profile, posts: [newPost.id, ...profile.posts] })
+        }
 
         alert("Post uploaded successfully")
         setIsCreatingPost(false)
@@ -312,6 +319,39 @@ const Context = ({ children }) => {
         setIsCommenting(false)
       }
     }
+    static async getFeedPosts() {
+      setIsFetchingFeedPosts(true)
+      if (user?.following && user.following.length < 1) {
+        setIsFetchingFeedPosts(false)
+        setPosts([])
+        return
+      }
+
+      if (user?.username) {
+        try {
+          let q = query(
+            collection(db, "posts"),
+            where("createdBy", "in", user.following)
+          )
+          let querySnapshot = await getDocs(q)
+
+          let feedPosts = []
+
+          querySnapshot.forEach((doc) => {
+            feedPosts.push({ ...doc.data(), id: doc.id })
+          })
+
+          feedPosts.sort((a, b) => b.createdAt - a.createdAt)
+
+          setPosts(feedPosts)
+
+          setIsFetchingFeedPosts(false)
+        } catch (err) {
+          alert(err.message)
+          setIsFetchingFeedPosts(false)
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -333,10 +373,12 @@ const Context = ({ children }) => {
     setIsFollowing,
     isHandlingFollowing,
     posts,
+    setPosts,
     isCreatingPost,
     isFetchingPost,
     isDeleting,
     isCommenting,
+    isFetchingFeedPosts,
   }
 
   return <AppContext.Provider value={obj}>{children}</AppContext.Provider>

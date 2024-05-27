@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useGlobalContext } from "../../Context"
+import { Link } from "react-router-dom"
 
 const SuggestedUser = ({ user }) => {
   const {
@@ -24,12 +25,16 @@ const SuggestedUser = ({ user }) => {
   return (
     <article className="suggested-user">
       <div>
-        <img
-          src={user.profilePicURL}
-          alt={`${user.firstName} ${user.lastName}`}
-        />
+        <Link to={`/user/${user.username}`}>
+          <img
+            src={user.profilePicURL}
+            alt={`${user.firstName} ${user.lastName}`}
+          />
+        </Link>
         <div>
-          <span>{`${user.firstName} ${user.lastName}`}</span>
+          <Link to={`/user/${user.username}`}>
+            <span>{`${user.firstName} ${user.lastName}`}</span>
+          </Link>
           <span>{user.username}</span>
         </div>
       </div>

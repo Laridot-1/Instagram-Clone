@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton"
 
-const FeedPostShadow = () => {
+const FeedPostSkeleton = () => {
   return (
     <div
       style={{
@@ -22,4 +22,4 @@ const FeedPostShadow = () => {
   )
 }
 
-export default FeedPostShadow
+export default FeedPostSkeleton

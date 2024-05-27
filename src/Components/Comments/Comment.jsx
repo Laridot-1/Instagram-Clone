@@ -34,12 +34,15 @@ const Comment = ({ comment }) => {
   return (
     <section className="profile-comment">
       <Link to={userProfile}>
-        <img src={commentProfile.profilePicURL} alt={commentProfile.username} />
+        <img
+          src={commentProfile?.profilePicURL}
+          alt={commentProfile?.username}
+        />
       </Link>
       <div>
         <div>
           <Link to={userProfile}>
-            <p>{commentProfile.username}</p>
+            <p>{commentProfile?.username}</p>
           </Link>
           <p>{comment.comment}</p>
         </div>
