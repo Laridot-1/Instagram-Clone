@@ -58,7 +58,7 @@ const Context = ({ children }) => {
     static signup(email) {
       const actionCodeSettings = {
         handleCodeInApp: true,
-        url: "http://localhost:5173/accounts/complete-signup",
+        url: "https://larinsta.vercel.app/accounts/complete-signup",
       }
       return sendSignInLinkToEmail(auth, email, actionCodeSettings)
     }
