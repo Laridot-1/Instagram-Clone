@@ -71,7 +71,7 @@ const Context = ({ children }) => {
     static resetPassword(email) {
       const actionCodeSettings = {
         handleCodeInApp: true,
-        url: "http://localhost:5173/accounts/",
+        url: "https://larinsta.vercel.app/accounts",
       }
       return sendPasswordResetEmail(auth, email, actionCodeSettings)
     }
