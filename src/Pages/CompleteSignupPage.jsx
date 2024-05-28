@@ -159,6 +159,7 @@ const CompleteSignupPage = () => {
               type="date"
               name="dob"
               id="dob"
+              placeholder="DOB"
               value={userInfo.dob}
               onChange={(e) => handleInput(e)}
             />
