@@ -1,24 +1,24 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useGlobalContext } from "../../Context"
 import TDProfileHeaderSkeleton from "./TDProfileHeaderSkeleton"
 import { Link } from "react-router-dom"
 
 const TDProfileHeader = () => {
-  const {
-    profile,
-    isFetchingProfile,
-    user,
-    isFollowing,
-    setIsFollowing,
-    isHandlingFollowing,
-    User,
-  } = useGlobalContext()
+  const { profile, isFetchingProfile, user, User } = useGlobalContext()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
 
   const visitingOwnProfile = user?.username === profile?.username
   const visitingAnotherProfile = user?.username !== profile?.username
 
   const handleFollow = async () => {
-    await User.followUser(profile?.uid)
+    await User.followUser(
+      profile?.uid,
+      isFollowing,
+      setIsFollowing,
+      setIsHandlingFollowing
+    )
   }
 
   useEffect(() => {

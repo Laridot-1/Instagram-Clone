@@ -40,10 +40,6 @@ const Context = ({ children }) => {
   const [profile, setProfile] = useState(null)
   const [isFetchingProfile, setIsFetchingProfile] = useState(true)
 
-  //Following States
-  const [isFollowing, setIsFollowing] = useState(false)
-  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
-
   //Create Post States
   const [posts, setPosts] = useState([])
   const [isCreatingPost, setIsCreatingPost] = useState(false)
@@ -112,7 +108,12 @@ const Context = ({ children }) => {
         alert(err.message)
       }
     }
-    static async followUser(uid) {
+    static async followUser(
+      uid,
+      isFollowing,
+      setIsFollowing,
+      setIsHandlingFollowing
+    ) {
       setIsHandlingFollowing(true)
 
       try {
@@ -126,13 +127,15 @@ const Context = ({ children }) => {
         if (isFollowing) {
           setUser({
             ...user,
-            following: user.following.filter((uid) => uid !== uid),
+            following: user.following.filter((userId) => userId !== uid),
           })
 
           if (profile) {
             setProfile({
               ...profile,
-              followers: profile.followers.filter((uid) => uid !== user.uid),
+              followers: profile.followers.filter(
+                (userId) => userId !== user.uid
+              ),
             })
           }
 
@@ -140,7 +143,7 @@ const Context = ({ children }) => {
             "user",
             JSON.stringify({
               ...user,
-              following: user.following.filter((uid) => uid !== uid),
+              following: user.following.filter((userId) => userId !== uid),
             })
           )
 
@@ -369,9 +372,6 @@ const Context = ({ children }) => {
     setUser,
     profile,
     isFetchingProfile,
-    isFollowing,
-    setIsFollowing,
-    isHandlingFollowing,
     posts,
     setPosts,
     isCreatingPost,

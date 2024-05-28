@@ -1,18 +1,20 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useGlobalContext } from "../../Context"
 import { Link } from "react-router-dom"
 
 const SuggestedUser = ({ user }) => {
-  const {
-    User,
-    user: ownProfile,
-    isFollowing,
-    setIsFollowing,
-    isHandlingFollowing,
-  } = useGlobalContext()
+  const { User, user: ownProfile } = useGlobalContext()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
 
   const handleFollow = async () => {
-    await User.followUser(user.uid)
+    await User.followUser(
+      user.uid,
+      isFollowing,
+      setIsFollowing,
+      setIsHandlingFollowing
+    )
   }
 
   useEffect(() => {

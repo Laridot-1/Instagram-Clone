@@ -19,16 +19,10 @@ import { useGlobalContext } from "../../Context"
 import CommentsModal from "./CommentsModal"
 
 const FeedPost = ({ post }) => {
-  const {
-    User,
-    isFollowing,
-    isHandlingFollowing,
-    user,
-    setIsFollowing,
-    isCommenting,
-    posts,
-    setPosts,
-  } = useGlobalContext()
+  const { User, user, isCommenting, posts, setPosts } = useGlobalContext()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
 
   const [isGettingProfile, setIsGettingProfile] = useState(true)
   const [feedPostProfile, setFeedPostProfile] = useState(null)
@@ -44,7 +38,12 @@ const FeedPost = ({ post }) => {
   const closeModal = () => setIsOpen(false)
 
   const handleFollow = async () => {
-    await User.followUser(feedPostProfile?.uid)
+    await User.followUser(
+      feedPostProfile?.uid,
+      isFollowing,
+      setIsFollowing,
+      setIsHandlingFollowing
+    )
   }
 
   const handleComment = async () => {

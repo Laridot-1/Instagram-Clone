@@ -1,24 +1,24 @@
 import { Link } from "react-router-dom"
 import { useGlobalContext } from "../../Context"
 import MBProfileHeaderSkeleton from "./MBProfileHeaderSkeleton"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 const MBProfileHeader = () => {
-  const {
-    profile,
-    isFetchingProfile,
-    user,
-    isFollowing,
-    setIsFollowing,
-    isHandlingFollowing,
-    User,
-  } = useGlobalContext()
+  const { profile, isFetchingProfile, user, User } = useGlobalContext()
+
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isHandlingFollowing, setIsHandlingFollowing] = useState(false)
 
   const visitingOwnProfile = user && user?.username === profile?.username
   const visitingAnotherProfile = user && user?.username !== profile?.username
 
   const handleFollow = async () => {
-    await User.followUser(profile?.uid)
+    await User.followUser(
+      profile?.uid,
+      isFollowing,
+      setIsFollowing,
+      setIsHandlingFollowing
+    )
   }
 
   useEffect(() => {
